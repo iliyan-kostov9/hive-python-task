@@ -8,7 +8,8 @@ setup:
 
 .PHONY: server-start
 server-start:
-	python3 -m http.server -b 127.0.0.0 8080 -d pages
+	# python3 -m http.server -b 127.0.0.0 8080 -d pages
+	python3 src/main.py
 
 .PHONY: watchdog-install
 watchdog-install:

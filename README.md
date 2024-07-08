@@ -1,24 +1,42 @@
 # Introduction
 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. ## Getting Started TODO: Repository contains the agreed folder structure that the project should contain. Each folder reflects an Azure resource. Please remove unnecessary folders from the repository. 1. Installation process
+This application is created based on the requiremnets, listed at `TASK.md`.
 
- TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
 
-1. Installation process
-2. Software dependencies
-3. Latest releases
-4. API references
+## Setup instruction
 
-1. Installation process
-Create virtual environment and install dependencies:
+1. Via CMake (recommended)
 
-## Build and Test
+    1. Create a virtual environment and install the dependencies:
 
-TODO: Describe and show how to build your code and run the tests.
+    ```bash
+    make setup
+    ```
 
-## Contribute
+    2. Run the webserver:
 
-TODO: Explain how othe:r users and developers can contribute to make your code better.
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files: - [ASP.NET Core](https://github.com/aspnet/Home) - [Visual Studio Code](https://github.com/Microsoft/vscode)
+    ```bash
+   mmake server-start
+    ```
 
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+
+2. Manual
+
+    1. Create and activate the virtual environment
+
+    ```bash
+	python3 -m venv .venv
+	source .venv/bin/activate
+    ```
+
+    2. Install the dependencies
+
+    ```bash
+	pip install -r requirements.txt
+    ```
+
+    3. Run the webserver
+
+    ```bash
+	python3 -m http.server -b 127.0.0.0 8080 -d pages
+    ```
