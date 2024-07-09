@@ -1,18 +1,13 @@
-from threading import Thread
+import asyncio
 
-import server.socket as hv_websocket
-import server.web as hv_web
-
-
-def start_web_server():
-    hv_web.run()
-
-
-def start_websocket_server():
-    hv_websocket.run()
-
+from server import main
 
 if __name__ == "__main__":
-    thread = Thread(target=start_websocket_server())
-    thread.start()
-    start_websocket_server()
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("Keyboard interrupted")
+    except AttributeError:
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(main())
+        loop.close()
