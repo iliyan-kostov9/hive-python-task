@@ -3,6 +3,8 @@ import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from typing import Any, Literal
 
+from client import Client
+
 try:
     import websockets
 except ModuleNotFoundError:
@@ -21,19 +23,39 @@ WEB_PORT: Literal[8080] = 8080
 SOCKET_HOSTNAME: Literal["localhost"] = "localhost"
 SOCKET_PORT: Literal[8001] = 8001
 
+global client
+
 
 class WebServer(BaseHTTPRequestHandler):
     def do_GET(self):
-        self.send_response(200)
-        self.send_header("Content-type", "text/html")
-        self.end_headers()
-        self.wfile.write(
-            bytes("<html><head><title>https://pythonbasics.org</title></head>", "utf-8")
-        )
-        self.wfile.write(bytes("<p>Request: %s</p>" % self.path, "utf-8"))
-        self.wfile.write(bytes("<body>", "utf-8"))
-        self.wfile.write(bytes("<p>This is an example web server.</p>", "utf-8"))
-        self.wfile.write(bytes("</body></html>", "utf-8"))
+
+        if self.path == "/":
+            self.send_response(200)
+            self.send_header("Content-type", "text/html")
+            self.end_headers()
+
+            with open("./pages/index.html", "r") as page:
+                index_html = page.read()
+
+            self.wfile.write(bytes(index_html, "utf-8"))
+
+    def do_POST(self):
+        if self.path == "/send-coords":
+            post_data = self.rfile.read(int(self.headers["Content-Length"]))
+            coords = json.loads(post_data)
+
+            client = Client(coords)
+            client.take_picture()
+
+            self.send_response(200)
+            self.send_header("Content-type", "application/json")
+            self.end_headers()
+            self.wfile.write(b"OK")
+
+        else:
+            self.send_response(404)
+            self.end_headers()
+            self.wfile.write(b"Error: Endpoint not found")
 
 
 def start_web_server():

@@ -1,1 +1,42 @@
-<h1>hello wold</h1>
+<!doctype html>
+<html>
+  <head>
+    <title>Hive task 7 days</title>
+  </head>
+  <body>
+    <script type="text/javascript">
+      document.addEventListener("mousemove", function (event) {
+        var x = event.clientX;
+        var y = event.clientY;
+
+        document.getElementById("x-coord").innerText = x;
+        document.getElementById("y-coord").innerText = y;
+      });
+
+      document.addEventListener("mousedown", function (event) {
+        if (event.button == 0) {
+          var x = event.clientX;
+          var y = event.clientY;
+
+          document.getElementById("clicked-x-coord").innerText = x;
+          document.getElementById("clicked-y-coord").innerText = y;
+
+          var request = new XMLHttpRequest();
+          request.open("POST", "/send-coords", true);
+          request.setRequestHeader(
+            "Content-Type",
+            "application/json;charset=UTF-8",
+          );
+          request.send(JSON.stringify({ x: x, y: y }));
+        }
+      });
+    </script>
+    <h1>Current cursor coordinates</h1>
+    <p>X: <span id="x-coord">0</span></p>
+    <p>Y: <span id="y-coord">0</span></p>
+
+    <h1>Clicked cursor coordinates</h1>
+    <p>X: <span id="clicked-x-coord">0</span></p>
+    <p>Y: <span id="clicked-y-coord">0</span></p>
+  </body>
+</html>
