@@ -1,6 +1,6 @@
 # Introduction
 
-This application is created based on the Hive requiremnets, listed at `TASK.md`.
+This application is created based on the Hive requirements, listed at `TASK.md`.
 
 ## Setup instructions
 
@@ -105,7 +105,7 @@ source .venv/bin/activate
 3. Run the web server:
 
 ```bash
-mmake server-start
+make server-start
 ```
 
 2. Manual
