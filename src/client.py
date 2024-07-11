@@ -64,8 +64,7 @@ class Client:
 
             ret, frame = open_camera.read()
 
-            cv2.imshow("Captured image", frame)
-            cv2.imwrite("image.jpg", frame)
+            cv2.imwrite("assets/image.jpg", frame)
 
             open_camera.release()
             cv2.destroyAllWindows()
