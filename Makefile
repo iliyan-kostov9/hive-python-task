@@ -7,13 +7,11 @@
 
 .PHONY: setup
 setup:
-	python3 -m venv .venv
-	source .venv/bin/activate
-	pip install --upgrade pip
-	pip install -r requirements.txt
-	echo "Python setup completed!"
-
-###################
+	python3 -m venv .venv && \
+	.venv/bin/pip install --upgrade pip --require-virtualenv && \
+	.venv/bin/pip install -r requirements.txt --require-virtualenv && \
+	. .venv/bin/activate && \
+	echo "Python setup completed!"###################
 #
 # Start server
 #
@@ -50,3 +48,19 @@ watchdog-install:
 	echo "watchdog installed!"
 
 
+####################
+#
+# Docker
+#
+# ################
+
+
+
+.PHONY: setup-docker
+setup-docker:
+	docker build -t hive-task .
+# docker run -it --name hive-task-con -v $(pwd):/hive hive-task
+
+.PHONY: remove-docker-con
+remove-docker-con:
+	docker rm hive-task-con

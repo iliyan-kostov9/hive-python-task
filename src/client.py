@@ -46,7 +46,7 @@ class Coordinates:
     y: float = 0.00
 
     @staticmethod
-    def from_json(json_str) -> Coordinates:
+    def from_json(json_str):
         return Coordinates(**(json.loads(json_str)))
 
 
@@ -61,5 +61,13 @@ class Client:
 
         if open_camera.isOpened():
             print("Camera is opened and ready to go!")
+
+            ret, frame = open_camera.read()
+
+            cv2.imshow("Captured image", frame)
+            cv2.imwrite("image.jpg", frame)
+
+            open_camera.release()
+            cv2.destroyAllWindows()
         else:
             print("Camera is closed! Please open for capture!")

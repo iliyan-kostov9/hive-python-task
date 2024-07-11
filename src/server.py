@@ -42,9 +42,8 @@ class WebServer(BaseHTTPRequestHandler):
     def do_POST(self):
         if self.path == "/send-coords":
             post_data = self.rfile.read(int(self.headers["Content-Length"]))
-            coords = json.loads(post_data)
 
-            client = Client(coords)
+            client = Client(post_data)
             client.take_picture()
 
             self.send_response(200)
