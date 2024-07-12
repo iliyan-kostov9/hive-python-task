@@ -1,7 +1,5 @@
 typing
 asyncio
-pyserial
 opencv-python
-Flask
 websockets
 
