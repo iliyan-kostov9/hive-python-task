@@ -1,43 +1,8 @@
 import json
+import uuid
 from dataclasses import dataclass
 
 import cv2
-import websockets
-
-
-def on_message(ws, message):
-    print(f"Received message: {message}")
-
-
-def on_error(ws, error):
-    print(f"Encountered error: {error}")
-
-
-def on_close(ws, close_status_code, close_msg):
-    print("Connection closed")
-
-
-def on_open(ws):
-    print("Connection opened")
-    ws.send("Hello, Server!")
-
-
-async def main():
-    async with websockets.connect(
-        "ws://localhost:8001",
-        on_message=on_message,
-        on_error=on_error,
-        on_close=on_close,
-    ) as ws:
-
-        ws.on_open = on_open
-        ws.run_forever()
-        # await ws.send("hello")
-        # response = await websocket.recv()
-        # print(response)
-        # asyncio.get_event_loop().run_until_complete(test())
-        # cp = ChargePoint('CP_1', ws)
-        # await asyncio.gather(cp.start(), cp.send_boot_notification())
 
 
 @dataclass(frozen=True)
@@ -52,9 +17,11 @@ class Coordinates:
 
 class Client:
     coordinates: Coordinates
+    img_path: str
 
     def __init__(self, json_str: str) -> None:
         self.coordinates = Coordinates.from_json(json_str)
+        self.img_path = ""
 
     def take_picture(self) -> None:
         open_camera = cv2.VideoCapture(0)
@@ -63,8 +30,10 @@ class Client:
             print("Camera is opened and ready to go!")
 
             ret, frame = open_camera.read()
+            self.img_path = f"assets/{str(uuid.uuid4())}_img.jpg"
 
-            cv2.imwrite("assets/image.jpg", frame)
+            cv2.imwrite(self.img_path, frame)
+            print("Image saved!")
 
             open_camera.release()
             cv2.destroyAllWindows()

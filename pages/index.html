@@ -30,7 +30,44 @@
           request.send(JSON.stringify({ x: x, y: y }));
         }
       });
+
+      const ws = new WebSocket("ws://localhost:8001/ws");
+      ws.onopen = function () {
+        ws.send("get_serial_data");
+      };
+
+      ws.onmessage = function (event) {
+        const imagesContainer = document.getElementById("images-container");
+        const data = JSON.parse(event.data);
+        console.log(data);
+
+        if (Array.isArray(data)) {
+          data.forEach((item) => {
+            const imageDiv = document.createElement("div");
+            imageDiv.innerHTML = `
+                <p>Coordinates: (${item.x}, ${item.y})</p>
+                <p>Image path: ${item.image_path}</p>
+                <img src="./${item.image_path}" alt="Captured image" style="width:200px;height:150px;">
+            `;
+            imagesContainer.appendChild(imageDiv);
+          });
+        } else {
+          const item = data;
+          const imageDiv = document.createElement("div");
+          imageDiv.innerHTML = `
+            <p>Coordinates: (${item.x}, ${item.y})</p>
+            <p>Image path: ${item.image_path}</p>
+            <img src="./${item.image_path}" alt="Captured image" style="width:200px;height:150px;">
+        `;
+          imagesContainer.appendChild(imageDiv);
+        }
+      };
+
+      ws.onerror = function (error) {
+        console.error("WebSocket error:", error);
+      };
     </script>
+
     <h1>Current cursor coordinates</h1>
     <p>X: <span id="x-coord">0</span></p>
     <p>Y: <span id="y-coord">0</span></p>
@@ -38,5 +75,8 @@
     <h1>Clicked cursor coordinates</h1>
     <p>X: <span id="clicked-x-coord">0</span></p>
     <p>Y: <span id="clicked-y-coord">0</span></p>
+
+    <h1>Captured Image and Coordinates</h1>
+    <div id="images-container"></div>
   </body>
 </html>
