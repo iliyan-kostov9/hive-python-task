@@ -13,3 +13,4 @@ Basic modules and stages for evaluation during implementation
 6. SQLite / mongoDB
 
 Please submit everything important for running the program in a GitHub repository and send the solution as a link to that repo. Good Luck!
+
