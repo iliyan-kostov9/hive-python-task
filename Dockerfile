@@ -11,10 +11,6 @@ COPY . /app
 
 EXPOSE 8080 8001
 
-LABEL org.opencontainers.image.source=https://codeberg.org/iliyan-kostov/hive-python-task \
-	version="0.0.1-RELEASE" \
-	description="Hive python task for image capture"
-
 LABEL org.opencontainers.image.source=https://github.com/IliyanKostov9/hive-python-task \
 	version="0.0.1-RELEASE" \
 	description="Hive python task for image capture"
