@@ -1,0 +1,14 @@
+version: "3.0"
+services:
+  hive-python-task:
+    image: hive-python-task:0.0.1-SNAPSHOT
+    ports:
+      - "8080:8080"
+      - "8001:8001"
+    restart: always
+    depends_on: []
+    networks:
+      - hive-python-task-network
+
+networks:
+  hive-python-task-network:

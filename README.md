@@ -17,7 +17,7 @@ Please make sure you have `git` and `python3` installed, if not then please exec
 sudo apt install git
 sudo apt install python3
 # For using virtual environment
-# Replace with the python version you are using, you can check it with `python3 --version
+# Replace with the python version you are using, you can check it with `python3 --version`
 sudo apt install python3.12-venv
 ```
 
@@ -128,4 +128,25 @@ make server-start
 
 ```bash
     python3 src/app.py
+```
+
+3. Docker
+
+<div style="border-left: 4px solid #007bff; padding-left: 10px; margin-bottom: 10px;">
+  <strong>Note:</strong> The docker image is still in development and for some reason the python app is not able to function as intended, due to the native container isolation affecting the async running of the web server && socket. Until I release a `RELEASE` image version, please ignore this part</div>
+
+1. Pull the docker image:
+    - GitHub: `docker pull ghcr.io/iliyankostov9/hive-python-task:0.0.1-snapshot`
+    - Codeberg: `docker pull codeberg.org/iliyan-kostov/hive-python-task:0.0.1-snapshot`
+
+2. Create a container and run it:
+
+```bash
+docker run -d -p 8080:8080 -p 8001:8001 --network host -m 2g --cpus=2 --name hive-python-task hive-python-task:0.0.1-RELEASE
+```
+
+Or simply with docker compose
+
+```bash
+docker compose up -d
 ```

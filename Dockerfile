@@ -1,40 +1,18 @@
-FROM eclipse-temurin:18 AS builder
+FROM python:3.11.9-slim-bookworm
+WORKDIR /app
+COPY requirements.txt /app
 
-ARG user=hive-member
-ARG group=hive
-ARG uid=1000
-ARG gid=1000
+RUN apt-get update && apt-get install -y libgl1-mesa-dev libglib2.0-0 libsm6 libxrender1 libxext6 cmake
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-	software-properties-common \
-	python3.11 python3.11-venv python3.11-dev \
-	vim cmake build-essential \
-	libgl1-mesa-glx libglib2.0-0 \
-	&& apt-get clean \
-	&& rm -rf /var/lib/apt/lists/*
+RUN pip install --upgrade pip -q \
+	&& pip install wheel \
+	&& pip install -r requirements.txt
+COPY . /app
 
-RUN groupadd -g ${gid} ${group} \
-	&& useradd -u ${uid} -g ${gid} -m -s /bin/bash ${user}
+EXPOSE 8080 8001
 
-WORKDIR /hive
-RUN chown -R ${user}:${group} /hive
+LABEL org.opencontainers.image.source=https://codeberg.org/iliyan-kostov/hive-python-task \
+	version="0.0.1-RELEASE" \
+	description="Hive python task for image capture"
 
-COPY --chown=${user}:${group} requirements.txt /hive/
-COPY --chown=${user}:${group} src /hive/src/
-COPY --chown=${user}:${group} assets /hive/assets/
-COPY --chown=${user}:${group} pages /hive/pages/
-COPY --chown=${user}:${group} Makefile /hive/Makefile
-
-USER ${user}
-
-RUN python3.11 -m venv /hive/.venv \
-	&& /hive/.venv/bin/pip install --upgrade pip \
-	&& /hive/.venv/bin/pip install -r /hive/requirements.txt \
-	&& ls -l /hive \
-	&& ls -l /hive/.venv \
-	&& /hive/.venv/bin/python --version
-
-ENV VIRTUAL_ENV=/hive/.venv
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-
-ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["make","server-start"]
